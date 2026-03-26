@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Herramientas de Texto</title>
+
+<style>
+body{
+font-family: Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+textarea,input{
+width:80%;
+margin:10px;
+padding:10px;
+border-radius:10px;
+border:none;
+}
+
+button{
+padding:10px 15px;
+margin:5px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:#2563eb;
+color:white;
+}
+
+#resultado{
+margin-top:20px;
+padding:15px;
+background:#1e293b;
+border-radius:10px;
+word-break:break-all;
+}
+
+canvas{
+margin-top:20px;
+background:white;
+padding:10px;
+}
+</style>
+
+</head>
+<body>
+
+<h1>⚡ Herramientas de Texto</h1>
+
+<textarea id="texto" placeholder="Escribe texto aquí"></textarea>
+
+<div>
+<button onclick="textoABinario()">Texto → Binario</button>
+<button onclick="binarioATexto()">Binario → Texto</button>
+<button onclick="generarQR()">Generar QR</button>
+<button onclick="generarUUID()">Generar UUID</button>
+<button onclick="exportarImagen()">Exportar Imagen</button>
+</div>
+
+<div id="resultado"></div>
+
+<canvas id="qr"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<script>
+
+function textoABinario(){
+let texto=document.getElementById("texto").value;
+let binario=texto.split('').map(c=>c.charCodeAt(0).toString(2)).join(' ');
+document.getElementById("resultado").innerText=binario;
+}
+
+function binarioATexto(){
+let bin=document.getElementById("texto").value;
+let texto=bin.split(' ').map(b=>String.fromCharCode(parseInt(b,2))).join('');
+document.getElementById("resultado").innerText=texto;
+}
+
+function generarQR(){
+let texto=document.getElementById("texto").value;
+let canvas=document.getElementById("qr");
+QRCode.toCanvas(canvas,texto);
+}
+
+function generarUUID(){
+let uuid=crypto.randomUUID();
+document.getElementById("resultado").innerText=uuid;
+}
+
+function exportarImagen(){
+html2canvas(document.body).then(canvas=>{
+let link=document.createElement("a");
+link.download="resultado.png";
+link.href=canvas.toDataURL();
+link.click();
+});
+}
+
+</script>
+
+</body>
+</html>
